@@ -24,7 +24,7 @@ jobs:
         comment_body="${{ github.event.comment.body }}"
         numbers=($(echo $comment_body | grep -o -E '[0-9]+'))
         if [ ${#numbers[@]} -eq 2 ]; then
-          python checker.py ${numbers[0]} ${numbers[1]}
+          python check.py ${numbers[0]} ${numbers[1]}
         else
           echo "Please provide exactly two numbers."
         fi
