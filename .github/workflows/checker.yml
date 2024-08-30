@@ -1,0 +1,30 @@
+name: Calculator
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  calculate:
+    if: contains(github.event.comment.body, 'calculate')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Calculate sum
+      run: |
+        # 提取数字
+        comment_body="${{ github.event.comment.body }}"
+        numbers=($(echo $comment_body | grep -o -E '[0-9]+'))
+        if [ ${#numbers[@]} -eq 2 ]; then
+          python calculator.py ${numbers[0]} ${numbers[1]}
+        else
+          echo "Please provide exactly two numbers."
+        fi
