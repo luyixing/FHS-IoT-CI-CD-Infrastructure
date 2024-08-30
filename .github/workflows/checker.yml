@@ -1,12 +1,12 @@
-name: Checker
+name: Topic Handler
 
 on:
   issue_comment:
     types: [created]
 
 jobs:
-  calculate:
-    if: contains(github.event.comment.body, 'calculate')
+  handle-topic:
+    if: contains(github.event.comment.body, 'rawtopic')
     runs-on: ubuntu-latest
 
     steps:
@@ -18,13 +18,9 @@ jobs:
       with:
         python-version: '3.8'
 
-    - name: Checker
+    - name: Extract topic and run script
       run: |
-        # 提取数字
         comment_body="${{ github.event.comment.body }}"
-        numbers=($(echo $comment_body | grep -o -E '[0-9]+'))
-        if [ ${#numbers[@]} -eq 2 ]; then
-          python check.py ${numbers[0]} ${numbers[1]}
-        else
-          echo "Please provide exactly two numbers."
-        fi
+        # 使用正则表达式提取 'rawtopic' 后的内容
+        topic=$(echo $comment_body | grep -oP 'rawtopic \K\S+')
+        python check.py "$topic"
