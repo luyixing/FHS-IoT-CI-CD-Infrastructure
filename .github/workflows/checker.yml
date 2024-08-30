@@ -1,4 +1,4 @@
-name: Calculator
+name: Checker
 
 on:
   issue_comment:
@@ -18,13 +18,13 @@ jobs:
       with:
         python-version: '3.8'
 
-    - name: Calculate sum
+    - name: Checker
       run: |
         # 提取数字
         comment_body="${{ github.event.comment.body }}"
         numbers=($(echo $comment_body | grep -o -E '[0-9]+'))
         if [ ${#numbers[@]} -eq 2 ]; then
-          python calculator.py ${numbers[0]} ${numbers[1]}
+          python checker.py ${numbers[0]} ${numbers[1]}
         else
           echo "Please provide exactly two numbers."
         fi
